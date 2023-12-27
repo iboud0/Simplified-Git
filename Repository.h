@@ -1,29 +1,27 @@
-#pragma once
+#ifndef REPOSITORY_H
+#define REPOSITORY_H
 
-#include <vector>
 #include <string>
-#include "File.h"
+#include <map>
 
 class Repository {
 public:
-    Repository(const std::string& logFilePath);
+    Repository(const std::string& repoPath);
 
-    ~Repository();
-
-    void addFile(const std::string& fileName, const std::string& content);
-
-    void commit(const std::string& message);
-
-    void displayLog() const;
+    void add(const std::string& fileName);
+    void commit(const std::string& fileName);
+    void log() const;
 
 private:
-    std::vector<File> files;
-    std::vector<std::string> logEntries;
+    std::string repoPath;
+    std::string gitFolderPath;
     std::string logFilePath;
+    std::string filesPath;
 
-    void log(const std::string& entry);
+    std::map<std::string, size_t> committedFiles;
 
-    void readLog();
-
-    void writeLog() const;
+    void loadCommittedFiles();
+    void saveCommittedFiles() const;
 };
+
+#endif // REPOSITORY_H

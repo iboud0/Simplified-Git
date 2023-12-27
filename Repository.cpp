@@ -1,49 +1,83 @@
 #include "Repository.h"
-#include <iostream>
+#include "File.h"
 #include <fstream>
+#include <iostream>
 
-Repository::Repository(const std::string& logFilePath) : logFilePath(logFilePath) {
-    readLog(); // Read existing log if available
+Repository::Repository(const std::string& repoPath) : repoPath(repoPath) {
+    gitFolderPath = repoPath + "/git";
+    logFilePath = gitFolderPath + "/log";
+    filesPath = gitFolderPath + "/files";
+
+    loadCommittedFiles();
 }
 
-Repository::~Repository() {
-    writeLog(); // Save log to disk on destruction
-}
+void Repository::add(const std::string& fileName) {
+    if (std::ifstream(repoPath + "/" + fileName)) {
+        auto it = committedFiles.find(fileName);
 
-void Repository::addFile(const std::string& fileName, const std::string& content) {
-    files.emplace_back(fileName, content);
-    log("Added file: " + fileName);
-}
-
-void Repository::commit(const std::string& message) {
-    // In a real-world scenario, you would perform actual commit actions here.
-    // For simplicity, we log the commit message.
-    log("Committed: " + message);
-}
-
-void Repository::displayLog() const {
-    std::cout << "Commit Log:\n";
-    for (const auto& entry : logEntries) {
-        std::cout << "- " << entry << "\n";
+        if (it == committedFiles.end()) {
+            committedFiles[fileName] = '#';
+            std::cout << "Added: " << fileName << std::endl;
+        } else {
+            std::cout << "File already added to the repository: " << fileName << std::endl;
+        }
+    } else {
+        std::cout << "File does not exist in the repository. Cannot add." << std::endl;
     }
-    std::cout << std::endl;
 }
 
-void Repository::log(const std::string& entry) {
-    logEntries.push_back(entry);
+void Repository::commit(const std::string& fileName) {
+    if (std::ifstream(repoPath + "/" + fileName)) {
+        auto it = committedFiles.find(fileName);
+
+        if (it != committedFiles.end()) {
+            File file(repoPath + "/" + fileName);
+            file.calculateHash();
+            size_t currentHash = file.getHash();
+
+            if (currentHash != it->second || it->second == '#') {
+                committedFiles[fileName] = currentHash;
+                saveCommittedFiles();
+                std::cout << "Committed changes for file: " << fileName << std::endl;
+            } else {
+                std::cout << "No changes to commit for file: " << fileName << std::endl;
+            }
+        } else {
+            std::cout << "File not found in committed files. Add the file first." << std::endl;
+        }
+    } else {
+        std::cout << "File does not exist in the repository. Cannot commit." << std::endl;
+    }
 }
 
-void Repository::readLog() {
+void Repository::log() const {
     std::ifstream logFile(logFilePath);
-    std::string entry;
-    while (std::getline(logFile, entry)) {
-        logEntries.push_back(entry);
+    std::string operation;
+
+    std::cout << "Repository Log:" << std::endl;
+    while (logFile >> operation) {
+        std::cout << operation << std::endl;
+    }
+    std::cout << "-------------------" << std::endl;
+}
+
+void Repository::loadCommittedFiles() {
+    std::ifstream filesFile(filesPath);
+    std::string fileName;
+    size_t hash;
+
+    while (filesFile >> fileName >> hash) {
+        committedFiles[fileName] = hash;
     }
 }
 
-void Repository::writeLog() const {
-    std::ofstream logFile(logFilePath, std::ios::app);
-    for (const auto& entry : logEntries) {
-        logFile << entry << "\n";
+void Repository::saveCommittedFiles() const {
+    std::ofstream filesFile(filesPath);
+
+    for (const auto& entry : committedFiles) {
+        filesFile << entry.first << " " << entry.second << std::endl;
     }
+
+    std::ofstream logFile(logFilePath, std::ios::app);
+    logFile << "add" << std::endl;
 }
