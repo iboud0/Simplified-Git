@@ -1,0 +1,4 @@
+go to testRepository path
+run Repository_test:
+g++ -o repository_test Repository_test.cpp ../../Repository.cpp ../../File.cpp -std=c++11
+.\Repository_test
