@@ -6,6 +6,7 @@
 #include <optional>
 
 enum class Operation {
+    Init,
     Add,
     Commit
 };
@@ -14,6 +15,7 @@ class Repository {
 public:
     Repository(const std::string& repoPath);
 
+    void init();
     void add(const std::string& fileName);
     void commit(const std::string& fileName);
     void log(Operation operation, const std::string& message) const;

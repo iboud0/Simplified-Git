@@ -136,3 +136,6 @@ void Repository::Status() const {
     std::cout << "-------------------" << std::endl;
 }
 
+void Repository::init() {
+    
+}
