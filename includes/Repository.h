@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <optional>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ private:
     string logFilePath;
     string filesPath;
 
-    map<string, size_t> committedFiles;
+    map<string, std::optional<size_t>> committedFiles;
 
     void loadCommittedFiles();
     void saveCommittedFiles() const;

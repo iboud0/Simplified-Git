@@ -2,8 +2,7 @@
 #include "includes/File.h"
 #include <fstream>
 #include <iostream>
-
-using namespace std;
+#include <optional>
 
 Repository::Repository(const string& repoPath) : repoPath(repoPath) {
     gitFolderPath = repoPath + "/git";
@@ -18,7 +17,7 @@ void Repository::add(const string& fileName) {
         auto it = committedFiles.find(fileName);
 
         if (it == committedFiles.end()) {
-            committedFiles[fileName] = NULL;
+            committedFiles[fileName] = std::nullopt;
             cout << "Added: " << fileName << endl;
         } else {
             cout << "File already added to the repository: " << fileName << endl;
@@ -35,9 +34,9 @@ void Repository::commit(const string& fileName) {
         if (it != committedFiles.end()) {
             File file(repoPath + "/" + fileName);
             file.calculateHash();
-            size_t currentHash = file.getHash();
+            std::optional<size_t> currentHash = file.getHash();
 
-            if (currentHash != it->second || it->second == NULL) { // TODO: comparison between int and null???
+            if (!it->second.has_value() || currentHash != it->second.value()) {
                 committedFiles[fileName] = currentHash;
                 saveCommittedFiles();
                 cout << "Committed changes for file: " << fileName << endl;
@@ -70,20 +69,27 @@ void Repository::loadCommittedFiles() {
     string fileName;
     size_t hash;
 
-    // TODO: first clear committedfiles map?
     while (filesFile >> fileName >> hash) {
         committedFiles[fileName] = hash;
     }
 }
 
-<<<<<<< HEAD
-void Repository::saveCommittedFiles() const {
-    std::ofstream filesFile(filesPath);
-    
+void Repository::overwriteFilesFile() const {
+    ofstream filesFile(filesPath, ios::trunc);
+
+    if (!filesFile.is_open()) {
+        cerr << "Error opening file for overwriting: " << filesPath << endl;
+        return;
+    }
+
     for (const auto& entry : committedFiles) {
-        filesFile << entry.first << " " << entry.second << std::endl;
-=======
-// TODO: handle exceptions (try catch) everywhere
+        if (entry.second.has_value()) {
+            filesFile << entry.first << " " << entry.second.value() << endl;
+        }
+    }
+
+    filesFile.close();
+}
 
 void Repository::saveCommittedFiles() const {
     overwriteFilesFile();
@@ -93,23 +99,6 @@ void Repository::saveCommittedFiles() const {
 
     logFile.close();
 }
-void Repository::overwriteFilesFile() const {
-    ofstream filesFile(filesPath, ios::trunc);
-
-    if (!filesFile.is_open()) {
-        cerr << "Error opening file for overwriting: " << filesPath << endl;
-        return;
->>>>>>> e2c854df1b21d6ae84bce06feba13917120611b1
-    }
-
-    for (const auto& entry : committedFiles) {
-        if (entry.second != NULL) {
-            filesFile << entry.first << " " << entry.second << endl;
-        }
-    }
-
-    filesFile.close();
-}
 
 void Repository::Status() const {
     cout << "Repository Status:" << endl;
@@ -118,10 +107,9 @@ void Repository::Status() const {
         string filePath = repoPath + "/" + entry.first;
         if (ifstream(filePath)) {
             File file(filePath);
-//            file.calculateHash();
-            size_t currentHash = file.getHash();
+            optional<size_t> currentHash = file.getHash();
 
-            if (entry.second != currentHash) {
+            if (!entry.second.has_value() || entry.second.value() != currentHash) {
                 cout << entry.first << " has been modified." << endl;
             } else {
                 cout << entry.first << " is up to date." << endl;

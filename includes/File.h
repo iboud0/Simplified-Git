@@ -2,24 +2,23 @@
 #define FILE_H
 
 #include <string>
-
-using namespace std;
+#include <optional>
 
 class File {
 public:
-    File(const string& name);
+    File(const std::string& name);
 
-    const string& getName() const;
-    const string& getContent() const;
-    size_t getHash() const;
+    const std::string& getName() const;
+    const std::string& getContent() const;
+    std::optional<size_t> getHash() const;  // Updated return type
 
     void readContent();
     void calculateHash();
 
 private:
-    string name;
-    string content;
-    size_t hash;
+    std::string name;
+    std::string content;
+    std::optional<size_t> hash;
 };
 
 #endif // FILE_H
