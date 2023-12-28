@@ -1,24 +1,11 @@
-#include "includes/Repository.h"
-#include "includes/Git.h"
+#include "mainwindow.h"
 
-using namespace std;
+#include <QApplication>
 
-int main() {
-    // Specify the file path where the log should be stored
-    const string logFilePath = "git_log.txt";
-
-    Repository myRepo(logFilePath);
-    Git myGit(myRepo);
-
-    myGit.add("file1.txt", "Content of file 1");
-    myGit.add("file2.txt", "Content of file 2");
-
-    myGit.commit("Initial commit");
-    myGit.displayLog();
-
-    myGit.add("file3.txt", "Content of file 3");
-    myGit.commit("Add file3.txt");
-    myGit.displayLog();
-
-    return 0;
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
 }
