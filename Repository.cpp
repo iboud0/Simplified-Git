@@ -1,5 +1,5 @@
-#include "Repository.h"
-#include "File.h"
+#include "includes/Repository.h"
+#include "includes/File.h"
 #include <fstream>
 #include <iostream>
 
@@ -16,7 +16,7 @@ void Repository::add(const std::string& fileName) {
         auto it = committedFiles.find(fileName);
 
         if (it == committedFiles.end()) {
-            committedFiles[fileName] = '#';
+            committedFiles[fileName] = NULL;
             std::cout << "Added: " << fileName << std::endl;
         } else {
             std::cout << "File already added to the repository: " << fileName << std::endl;
@@ -35,7 +35,7 @@ void Repository::commit(const std::string& fileName) {
             file.calculateHash();
             size_t currentHash = file.getHash();
 
-            if (currentHash != it->second || it->second == '#') {
+            if (currentHash != it->second || it->second == NULL) {
                 committedFiles[fileName] = currentHash;
                 saveCommittedFiles();
                 std::cout << "Committed changes for file: " << fileName << std::endl;
@@ -74,10 +74,46 @@ void Repository::loadCommittedFiles() {
 void Repository::saveCommittedFiles() const {
     std::ofstream filesFile(filesPath);
 
-    for (const auto& entry : committedFiles) {
-        filesFile << entry.first << " " << entry.second << std::endl;
-    }
+    overwriteFilesFile();
 
     std::ofstream logFile(logFilePath, std::ios::app);
     logFile << "add" << std::endl;
 }
+void Repository::overwriteFilesFile() const {
+    std::ofstream filesFile(filesPath, std::ios::trunc);
+
+    if (!filesFile.is_open()) {
+        std::cerr << "Error opening file for overwriting: " << filesPath << std::endl;
+        return;
+    }
+
+    for (const auto& entry : committedFiles) {
+        if (entry.second != NULL) {
+            filesFile << entry.first << " " << entry.second << std::endl;
+        }
+    }
+}
+
+void Repository::Status() const {
+    std::cout << "Repository Status:" << std::endl;
+    
+    for (const auto& entry : committedFiles) {
+        std::string filePath = repoPath + "/" + entry.first;
+        if (std::ifstream(filePath)) {
+            File file(filePath);
+            file.calculateHash();
+            size_t currentHash = file.getHash();
+
+            if (entry.second != currentHash) {
+                std::cout << entry.first << " has been modified." << std::endl;
+            } else {
+                std::cout << entry.first << " is up to date." << std::endl;
+            }
+        } else {
+            std::cout << entry.first << " does not exist." << std::endl;
+        }
+    }
+
+    std::cout << "-------------------" << std::endl;
+}
+

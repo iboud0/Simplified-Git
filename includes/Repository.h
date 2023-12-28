@@ -11,6 +11,8 @@ public:
     void add(const std::string& fileName);
     void commit(const std::string& fileName);
     void log() const;
+    void Status() const;
+
 
 private:
     std::string repoPath;
@@ -22,6 +24,7 @@ private:
 
     void loadCommittedFiles();
     void saveCommittedFiles() const;
+    void overwriteFilesFile() const;
 };
 
 #endif // REPOSITORY_H
