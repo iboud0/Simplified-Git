@@ -8,7 +8,9 @@
 enum class Operation {
     Init,
     Add,
-    Commit
+    Commit,
+    Status
+
 };
 
 class Repository {
