@@ -25,19 +25,15 @@ void testRepositoryOperations() {
 
     // Test adding a file
     repo.add("myTestFile.txt");
-    repo.log();
 
     // Test committing changes
     repo.commit("myTestFile.txt");
-    repo.log();
 
     // Test adding the same file again
     repo.add("myTestFile.txt");
-    repo.log();
 
     // Test committing again
     repo.commit("myTestFile.txt");
-    repo.log();
 
     // Modify the content of the test file
     std::ofstream testFile(repoPath + "/myTestFile.txt", std::ios::app);
@@ -46,7 +42,6 @@ void testRepositoryOperations() {
 
     // Commit changes
     repo.commit("myTestFile.txt");
-    repo.log();
 
     // Delete the test file from the repository
     if (remove((repoPath + "/myTestFile.txt").c_str()) == 0) {
@@ -57,11 +52,9 @@ void testRepositoryOperations() {
 
     // Try to adding after deleting the file
     repo.add("myTestFile.txt");
-    repo.log();
 
     // Try to commit after deleting the file
     repo.commit("myTestFile.txt");
-    repo.log();
 
     // Clear the log and files files
     clearFiles(repoPath + "/git/log", repoPath + "/git/files");

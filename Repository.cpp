@@ -4,7 +4,7 @@
 #include <iostream>
 #include <optional>
 
-Repository::Repository(const string& repoPath) : repoPath(repoPath) {
+Repository::Repository(const std::string& repoPath) : repoPath(repoPath) {
     gitFolderPath = repoPath + "/git";
     logFilePath = gitFolderPath + "/log";
     filesPath = gitFolderPath + "/files";
@@ -12,23 +12,26 @@ Repository::Repository(const string& repoPath) : repoPath(repoPath) {
     loadCommittedFiles();
 }
 
-void Repository::add(const string& fileName) {
-    if (ifstream(repoPath + "/" + fileName)) {
+void Repository::add(const std::string& fileName) {
+    if (std::ifstream(repoPath + "/" + fileName)) {
         auto it = committedFiles.find(fileName);
 
         if (it == committedFiles.end()) {
             committedFiles[fileName] = std::nullopt;
-            cout << "Added: " << fileName << endl;
+            log(Operation::Add, "File added successfully");
+            std::cout << "Added: " << fileName << std::endl;
         } else {
-            cout << "File already added to the repository: " << fileName << endl;
+            log(Operation::Add, "File already added to the repository");
+            std::cout << "File already added to the repository: " << fileName << std::endl;
         }
     } else {
-        cout << "File does not exist in the repository. Cannot add." << endl;
+        log(Operation::Add, "File does not exist in the repository");
+        std::cout << "File does not exist in the repository. Cannot add." << std::endl;
     }
 }
 
-void Repository::commit(const string& fileName) {
-    if (ifstream(repoPath + "/" + fileName)) {
+void Repository::commit(const std::string& fileName) {
+    if (std::ifstream(repoPath + "/" + fileName)) {
         auto it = committedFiles.find(fileName);
 
         if (it != committedFiles.end()) {
@@ -39,34 +42,49 @@ void Repository::commit(const string& fileName) {
             if (!it->second.has_value() || currentHash != it->second.value()) {
                 committedFiles[fileName] = currentHash;
                 saveCommittedFiles();
-                cout << "Committed changes for file: " << fileName << endl;
+                std::cout << "Committed changes for file: " << fileName << std::endl;
             } else {
-                cout << "No changes to commit for file: " << fileName << endl;
+                log(Operation::Commit, "No changes to commit for file");
+                std::cout << "No changes to commit for file: " << fileName << std::endl;
             }
         } else {
-            cout << "File not found in committed files. Add the file first." << endl;
+            log(Operation::Commit, "File not found in committed files");
+            std::cout << "File not found in committed files. Add the file first." << std::endl;
         }
     } else {
-        cout << "File does not exist in the repository. Cannot commit." << endl;
+        log(Operation::Commit, "File does not exist in the repository");
+        std::cout << "File does not exist in the repository. Cannot commit." << std::endl;
     }
 }
 
-void Repository::log() const {
-    ifstream logFile(logFilePath);
-    string operation;
 
-    cout << "Repository Log:" << endl;
-    while (logFile >> operation) {
-        cout << operation << endl;
+void Repository::log(Operation operation, const std::string& message) const {
+    std::ofstream logFile(logFilePath, std::ios::app);
+
+    if (!logFile.is_open()) {
+        std::cerr << "Error opening log file: " << logFilePath << std::endl;
+        return;
     }
-    cout << "-------------------" << endl;
+
+    std::string operationStr;
+    switch (operation) {
+        case Operation::Add:
+            operationStr = "Add";
+            break;
+        case Operation::Commit:
+            operationStr = "Commit";
+            break;
+    }
+
+    logFile << operationStr << ": " << message << std::endl;
+    logFile << "--------------------------------" << std::endl;
 
     logFile.close();
 }
 
 void Repository::loadCommittedFiles() {
-    ifstream filesFile(filesPath);
-    string fileName;
+    std::ifstream filesFile(filesPath);
+    std::string fileName;
     size_t hash;
 
     while (filesFile >> fileName >> hash) {
@@ -75,16 +93,16 @@ void Repository::loadCommittedFiles() {
 }
 
 void Repository::overwriteFilesFile() const {
-    ofstream filesFile(filesPath, ios::trunc);
+    std::ofstream filesFile(filesPath, std::ios::trunc);
 
     if (!filesFile.is_open()) {
-        cerr << "Error opening file for overwriting: " << filesPath << endl;
+        std::cerr << "Error opening file for overwriting: " << filesPath << std::endl;
         return;
     }
 
     for (const auto& entry : committedFiles) {
         if (entry.second.has_value()) {
-            filesFile << entry.first << " " << entry.second.value() << endl;
+            filesFile << entry.first << " " << entry.second.value() << std::endl;
         }
     }
 
@@ -93,32 +111,28 @@ void Repository::overwriteFilesFile() const {
 
 void Repository::saveCommittedFiles() const {
     overwriteFilesFile();
-
-    ofstream logFile(logFilePath, ios::app);
-    logFile << "add" << endl;
-
-    logFile.close();
+    log(Operation::Commit, "Changes committed successfully");
 }
 
 void Repository::Status() const {
-    cout << "Repository Status:" << endl;
+    std::cout << "Repository Status:" << std::endl;
     
     for (const auto& entry : committedFiles) {
-        string filePath = repoPath + "/" + entry.first;
-        if (ifstream(filePath)) {
+        std::string filePath = repoPath + "/" + entry.first;
+        if (std::ifstream(filePath)) {
             File file(filePath);
-            optional<size_t> currentHash = file.getHash();
+            std::optional<size_t> currentHash = file.getHash();
 
             if (!entry.second.has_value() || entry.second.value() != currentHash) {
-                cout << entry.first << " has been modified." << endl;
+                std::cout << entry.first << " has been modified." << std::endl;
             } else {
-                cout << entry.first << " is up to date." << endl;
+                std::cout << entry.first << " is up to date." << std::endl;
             }
         } else {
-            cout << entry.first << " does not exist." << endl;
+            std::cout << entry.first << " does not exist." << std::endl;
         }
     }
 
-    cout << "-------------------" << endl;
+    std::cout << "-------------------" << std::endl;
 }
 

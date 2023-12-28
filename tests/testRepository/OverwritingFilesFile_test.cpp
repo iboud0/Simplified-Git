@@ -30,6 +30,13 @@ void displayFileContents(const std::string& filePath) {
     file.close();
 }
 
+void clearFiles(const std::string& filePath1, const std::string& filePath2) {
+    std::ofstream file1(filePath1, std::ios::trunc);
+    file1.close();
+    std::ofstream file2(filePath2, std::ios::trunc);
+    file2.close();
+}
+
 void testOverwriteFilesFile() {
     std::string repoPath = "repositoryTest";
     Repository repo(repoPath);
@@ -58,6 +65,9 @@ void testOverwriteFilesFile() {
     // Display modified file contents
     std::cout << "Modified files content:" << std::endl;
     displayFileContents(repoPath + "/git/files");
+
+    // Clear the log and files files
+    clearFiles(repoPath + "/git/log", repoPath + "/git/files");
 }
 
 int main() {
