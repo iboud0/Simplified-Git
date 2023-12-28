@@ -5,3 +5,6 @@ g++ -o repository_test Repository_test.cpp ../../Repository.cpp ../../File.cpp -
 
 g++ -o overwrite_test overwrite_test.cpp ../../Repository.cpp ../../File.cpp -std=c++11
 .\overwrite_test
+
+g++ -o Status_test Status_test.cpp ../../Repository.cpp ../../File.cpp -std=c++11
+.\Status_test

@@ -93,3 +93,27 @@ void Repository::overwriteFilesFile() const {
         }
     }
 }
+
+void Repository::Status() const {
+    std::cout << "Repository Status:" << std::endl;
+    
+    for (const auto& entry : committedFiles) {
+        std::string filePath = repoPath + "/" + entry.first;
+        if (std::ifstream(filePath)) {
+            File file(filePath);
+            file.calculateHash();
+            size_t currentHash = file.getHash();
+
+            if (entry.second != currentHash) {
+                std::cout << entry.first << " has been modified." << std::endl;
+            } else {
+                std::cout << entry.first << " is up to date." << std::endl;
+            }
+        } else {
+            std::cout << entry.first << " does not exist." << std::endl;
+        }
+    }
+
+    std::cout << "-------------------" << std::endl;
+}
+

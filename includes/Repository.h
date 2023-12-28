@@ -11,6 +11,8 @@ public:
     void add(const std::string& fileName);
     void commit(const std::string& fileName);
     void log() const;
+    void Status() const;
+
 
 private:
     std::string repoPath;
