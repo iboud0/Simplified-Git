@@ -2,13 +2,15 @@
 
 #include "Repository.h"
 
+using namespace std;
+
 class Git {
 public:
     Git(Repository& repo);
 
-    void add(const std::string& fileName, const std::string& content);
+    void add(const string& fileName, const string& content);
 
-    void commit(const std::string& message);
+    void commit(const string& message);
 
     void displayLog() const;
 

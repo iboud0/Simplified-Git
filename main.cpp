@@ -1,9 +1,11 @@
-#include "Repository.h"
-#include "Git.h"
+#include "includes/Repository.h"
+#include "includes/Git.h"
+
+using namespace std;
 
 int main() {
     // Specify the file path where the log should be stored
-    const std::string logFilePath = "git_log.txt";
+    const string logFilePath = "git_log.txt";
 
     Repository myRepo(logFilePath);
     Git myGit(myRepo);

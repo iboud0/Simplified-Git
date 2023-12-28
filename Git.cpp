@@ -7,7 +7,7 @@ void Git::add(const std::string& fileName, const std::string& content) {
 }
 
 void Git::commit(const std::string& message) {
-    repository.commit(message);
+    repository.commit(message); // TODO: commit message or filename?!
 }
 
 void Git::displayLog() const {
