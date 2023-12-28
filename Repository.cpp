@@ -73,7 +73,7 @@ void Repository::loadCommittedFiles() {
 
 void Repository::saveCommittedFiles() const {
     std::ofstream filesFile(filesPath);
-
+    
     for (const auto& entry : committedFiles) {
         filesFile << entry.first << " " << entry.second << std::endl;
     }
