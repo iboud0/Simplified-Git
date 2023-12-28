@@ -150,3 +150,10 @@ void Repository::Status() const {
 
     std::cout << "-------------------" << std::endl;
 }
+<<<<<<< HEAD
+
+void Repository::init() {
+    
+}
+=======
+>>>>>>> a02ce5a64f4a193fd672e82d6b4e46b9b9b24a67
