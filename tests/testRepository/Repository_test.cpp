@@ -67,8 +67,10 @@ void testRepositoryOperations() {
     clearFiles(repoPath + "/git/log", repoPath + "/git/files");
 }
 
+
 int main() {
     testRepositoryOperations();
 
     return 0;
 }
+

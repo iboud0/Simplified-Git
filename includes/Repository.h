@@ -22,6 +22,7 @@ private:
 
     void loadCommittedFiles();
     void saveCommittedFiles() const;
+    void overwriteFilesFile() const;
 };
 
 #endif // REPOSITORY_H
