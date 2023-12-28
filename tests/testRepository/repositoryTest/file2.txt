@@ -1,1 +1,2 @@
-file2
+Initial content for file2.txt
+Modified content for file2.txt

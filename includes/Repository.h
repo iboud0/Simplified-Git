@@ -4,24 +4,29 @@
 #include <string>
 #include <map>
 
+using namespace std;
+
 class Repository {
 public:
-    Repository(const std::string& repoPath);
+    Repository(const string& repoPath);
 
-    void add(const std::string& fileName);
-    void commit(const std::string& fileName);
+    void add(const string& fileName);
+    void commit(const string& fileName);
     void log() const;
+    void Status() const;
+
 
 private:
-    std::string repoPath;
-    std::string gitFolderPath;
-    std::string logFilePath;
-    std::string filesPath;
+    string repoPath;
+    string gitFolderPath;
+    string logFilePath;
+    string filesPath;
 
-    std::map<std::string, size_t> committedFiles;
+    map<string, size_t> committedFiles;
 
     void loadCommittedFiles();
     void saveCommittedFiles() const;
+    void overwriteFilesFile() const;
 };
 
 #endif // REPOSITORY_H

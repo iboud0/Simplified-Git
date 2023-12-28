@@ -3,20 +3,22 @@
 
 #include <string>
 
+using namespace std;
+
 class File {
 public:
-    File(const std::string& name);
+    File(const string& name);
 
-    const std::string& getName() const;
-    const std::string& getContent() const;
+    const string& getName() const;
+    const string& getContent() const;
     size_t getHash() const;
 
     void readContent();
     void calculateHash();
 
 private:
-    std::string name;
-    std::string content;
+    string name;
+    string content;
     size_t hash;
 };
 

@@ -2,16 +2,18 @@
 #include <fstream>
 #include <functional>
 
-File::File(const std::string& name) : name(name) {
+using namespace std;
+
+File::File(const string& name) : name(name) {
     readContent();
     calculateHash();
 }
 
-const std::string& File::getName() const {
+const string& File::getName() const {
     return name;
 }
 
-const std::string& File::getContent() const {
+const string& File::getContent() const {
     return content;
 }
 
@@ -20,11 +22,13 @@ size_t File::getHash() const {
 }
 
 void File::readContent() {
-    std::ifstream file(name);
-    content.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    ifstream file(name);
+    content.assign((std::istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+
+    file.close();
 }
 
 void File::calculateHash() {
-    std::hash<std::string> hasher;
+    hash<string> hasher;
     hash = hasher(content);
 }

@@ -1,0 +1,7 @@
+# ninja log v5
+27	419	7254492328343986	CMakeFiles/Simplified_Git.dir/main.cpp.obj	c9ccc2f49044908c
+1	422	7254492328353966	CMakeFiles/Simplified_Git.dir/tests/testFile/File_test.cpp.obj	8780e706c5ca937a
+9	569	7254492329853987	CMakeFiles/Simplified_Git.dir/tests/testRepository/Repository_test.cpp.obj	d11aef0a45f5ccf6
+13	585	7254492330023959	CMakeFiles/Simplified_Git.dir/tests/testRepository/Status_test.cpp.obj	d3c54b3a42679980
+5	636	7254492330533959	CMakeFiles/Simplified_Git.dir/tests/testRepository/overwrite_test.cpp.obj	cc3003240d99c13d
+20	694	7254492331113951	CMakeFiles/Simplified_Git.dir/Repository.cpp.obj	749bc7cceb5da3f9
