@@ -3,6 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include <optional>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 Repository::Repository(const std::string& repoPath) : repoPath(repoPath) {
     gitFolderPath = repoPath + "/git";
@@ -114,25 +117,36 @@ void Repository::saveCommittedFiles() const {
     log(Operation::Commit, "Changes committed successfully");
 }
 
-void Repository::Status() const {
-    std::cout << "Repository Status:" << std::endl;
-    
-    for (const auto& entry : committedFiles) {
-        std::string filePath = repoPath + "/" + entry.first;
-        if (std::ifstream(filePath)) {
-            File file(filePath);
-            std::optional<size_t> currentHash = file.getHash();
 
-            if (!entry.second.has_value() || entry.second.value() != currentHash) {
-                std::cout << entry.first << " has been modified." << std::endl;
-            } else {
-                std::cout << entry.first << " is up to date." << std::endl;
-            }
+
+void Repository::Status() const {
+
+    std::cout << "Repository Status:" << std::endl;
+
+    // Check for untracked, modified, and up-to-date files
+    for (const auto& file : fs::directory_iterator(repoPath)) {
+        std::string fileName = file.path().filename().string();
+        auto it = committedFiles.find(fileName);
+
+        if (it == committedFiles.end()) {
+            // Untracked file
+            std::cout << fileName << " is untracked." << std::endl;
         } else {
-            std::cout << entry.first << " does not exist." << std::endl;
+            File file(repoPath + "/" + fileName);
+            auto currentHash = file.getHash();
+
+            if (!it->second.has_value()) {
+                // File added but not committed yet
+                std::cout << fileName << " added but not committed." << std::endl;
+            } else if (currentHash != it->second.value()) {
+                // Modified file
+                std::cout << fileName << " has been modified." << std::endl;
+            } else {
+                // Up-to-date file
+                std::cout << fileName << " is up to date." << std::endl;
+            }
         }
     }
 
     std::cout << "-------------------" << std::endl;
 }
-

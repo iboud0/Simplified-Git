@@ -8,3 +8,5 @@ g++ -o OverwritingFilesFile_test OverwritingFilesFile_test.cpp ../../Repository.
 
 g++ -o Status_test Status_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17
 .\Status_test
+
+g++ Status_test.cpp -o Status_test -std=c++17 -lstdc++fs
