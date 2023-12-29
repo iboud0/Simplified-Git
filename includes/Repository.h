@@ -23,14 +23,15 @@ public:
     void log(Operation operation, const std::string& message) const;
     std::vector<std::string> status() const;
 
+    std::map<std::string, std::optional<size_t>> committedFiles;
+    std::string repoPath;
+
+
 
 private:
-    std::string repoPath;
     std::string gitFolderPath;
     std::string logFilePath;
     std::string filesPath;
-
-    std::map<std::string, std::optional<size_t>> committedFiles;
 
     void loadCommittedFiles();
     void saveCommittedFiles(const std::string& message) const;

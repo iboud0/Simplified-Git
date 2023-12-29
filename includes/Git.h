@@ -1,19 +1,33 @@
-#pragma once
+#ifndef GIT_H
+#define GIT_H
 
+#include <iostream>
+#include <string>
 #include "Repository.h"
-
-using namespace std;
 
 class Git {
 public:
-    Git(Repository& repo);
+    enum class Command {
+        Init,
+        Add,
+        Commit,
+        Status,
+        Exit,
+        Unknown
+    };
 
-    void add(const string& fileName, const string& content);
+    Git(const std::string& repoPath);
 
-    void commit(const string& message);
-
-    void displayLog() const;
+    void repl();
 
 private:
-    Repository& repository;
+    Repository repository;
+
+    Command parseCommand(const std::string& input);
+
+    void handleAdd();
+
+    void handleCommit();
 };
+
+#endif
