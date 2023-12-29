@@ -40,6 +40,7 @@ void clearFiles(const std::string& filePath1, const std::string& filePath2) {
 void testOverwriteFilesFile() {
     std::string repoPath = "repositoryTest";
     Repository repo(repoPath);
+    std::string msg = "sample commit message";
 
     // Create and add initial files
     createTestFiles(repoPath);
@@ -48,9 +49,9 @@ void testOverwriteFilesFile() {
     repo.add("file3.txt");
 
     // Commit the initial files
-    repo.commit("file1.txt");
-    repo.commit("file2.txt");
-    repo.commit("file3.txt");
+    repo.commit("file1.txt", msg);
+    repo.commit("file2.txt", msg);
+    repo.commit("file3.txt", msg);
 
     // Display initial file contents
     std::cout << "Initial files content:" << std::endl;
@@ -58,9 +59,9 @@ void testOverwriteFilesFile() {
 
     // Modify and commit the changes
     modifyTestFiles(repoPath);
-    repo.commit("file1.txt");
-    repo.commit("file2.txt");
-    repo.commit("file3.txt");
+    repo.commit("file1.txt", msg);
+    repo.commit("file2.txt", msg);
+    repo.commit("file3.txt", msg);
 
     // Display modified file contents
     std::cout << "Modified files content:" << std::endl;

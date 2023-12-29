@@ -19,6 +19,7 @@ void testRepositoryOperations() {
     // Provide the path to the existing repository folder
     std::string repoPath = "repositoryTest";
     Repository repo(repoPath);
+    std::string msg = "Sample commit message";
 
     // Create the test file
     createTestFile(repoPath + "/myTestFile.txt");
@@ -28,7 +29,7 @@ void testRepositoryOperations() {
     repo.status();
 
     // Test committing changes
-    repo.commit("myTestFile.txt");
+    repo.commit("myTestFile.txt", msg);
     repo.status();
 
     // Test adding the same file again
@@ -36,7 +37,7 @@ void testRepositoryOperations() {
     repo.status();
 
     // Test committing again
-    repo.commit("myTestFile.txt");
+    repo.commit("myTestFile.txt", msg);
     repo.status();
 
     // Modify the content of the test file
@@ -45,7 +46,7 @@ void testRepositoryOperations() {
     testFile.close();
 
     // Commit changes
-    repo.commit("myTestFile.txt");
+    repo.commit("myTestFile.txt", msg);
     repo.status();
 
     // Delete the test file from the repository
@@ -60,7 +61,7 @@ void testRepositoryOperations() {
     repo.status();
 
     // Try to commit after deleting the file
-    repo.commit("myTestFile.txt");
+    repo.commit("myTestFile.txt", msg);
     repo.status();
 
     // Clear the log and files files
