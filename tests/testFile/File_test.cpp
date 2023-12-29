@@ -12,7 +12,7 @@ void testFileOperations() {
     std::cout << "File Content: " << testFile.getContent() << std::endl;
 
     // Test getting file hash
-    std::cout << "File Hash: " << testFile.getHash() << std::endl;
+    std::cout << "File Hash: " << testFile.getHash().value() << std::endl;
 }
 
 int main() {

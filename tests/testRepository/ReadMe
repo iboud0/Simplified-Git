@@ -1,12 +1,14 @@
 go to testRepository path
+
 run Repository_test:
-g++ -o repository_test Repository_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17
+g++ -o Repository_test Repository_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17 -lstdc++fs
 .\Repository_test
 
+run OverwritingFilesFile_test:
 g++ -o OverwritingFilesFile_test OverwritingFilesFile_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17
 .\OverwritingFilesFile_test
 
-g++ -o Status_test Status_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17
-.\Status_test
+run Init_test:
+ g++ -o Init_test Init_test.cpp ../../Repository.cpp ../../File.cpp -std=c++17 -lstdc++fs
+.\Init_test
 
-g++ Status_test.cpp -o Status_test -std=c++17 -lstdc++fs

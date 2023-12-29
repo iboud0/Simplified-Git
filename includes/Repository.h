@@ -10,7 +10,6 @@ enum class Operation {
     Add,
     Commit,
     Status
-
 };
 
 class Repository {
@@ -19,9 +18,9 @@ public:
 
     void init();
     void add(const std::string& fileName);
-    void commit(const std::string& fileName);
+    void commit(const std::string& fileName, const std::string& message);
     void log(Operation operation, const std::string& message) const;
-    void Status() const;
+    void status() const;
 
 
 private:
@@ -33,7 +32,7 @@ private:
     std::map<std::string, std::optional<size_t>> committedFiles;
 
     void loadCommittedFiles();
-    void saveCommittedFiles() const;
+    void saveCommittedFiles(const std::string& message) const;
     void overwriteFilesFile() const;
 };
 

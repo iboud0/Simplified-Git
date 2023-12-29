@@ -33,7 +33,7 @@ void Repository::add(const std::string& fileName) {
     }
 }
 
-void Repository::commit(const std::string& fileName) {
+void Repository::commit(const std::string& fileName, const std::string& message) {
     if (std::ifstream(repoPath + "/" + fileName)) {
         auto it = committedFiles.find(fileName);
 
@@ -44,7 +44,7 @@ void Repository::commit(const std::string& fileName) {
 
             if (!it->second.has_value() || currentHash != it->second.value()) {
                 committedFiles[fileName] = currentHash;
-                saveCommittedFiles();
+                saveCommittedFiles(message);
                 std::cout << "Committed changes for file: " << fileName << std::endl;
             } else {
                 log(Operation::Commit, "No changes to commit for file");
@@ -112,37 +112,30 @@ void Repository::overwriteFilesFile() const {
     filesFile.close();
 }
 
-void Repository::saveCommittedFiles() const {
+void Repository::saveCommittedFiles(const std::string& message) const {
     overwriteFilesFile();
-    log(Operation::Commit, "Changes committed successfully");
+    log(Operation::Commit, message);
 }
 
-
-
-void Repository::Status() const {
+void Repository::status() const {
 
     std::cout << "Repository Status:" << std::endl;
 
-    // Check for untracked, modified, and up-to-date files
     for (const auto& file : fs::directory_iterator(repoPath)) {
         std::string fileName = file.path().filename().string();
         auto it = committedFiles.find(fileName);
 
         if (it == committedFiles.end()) {
-            // Untracked file
             std::cout << fileName << " is untracked." << std::endl;
         } else {
             File file(repoPath + "/" + fileName);
             auto currentHash = file.getHash();
 
             if (!it->second.has_value()) {
-                // File added but not committed yet
                 std::cout << fileName << " added but not committed." << std::endl;
             } else if (currentHash != it->second.value()) {
-                // Modified file
                 std::cout << fileName << " has been modified." << std::endl;
             } else {
-                // Up-to-date file
                 std::cout << fileName << " is up to date." << std::endl;
             }
         }
@@ -150,10 +143,22 @@ void Repository::Status() const {
 
     std::cout << "-------------------" << std::endl;
 }
-<<<<<<< HEAD
 
 void Repository::init() {
-    
+    std::string gitFolderPath = repoPath + "/git";
+
+    if (fs::exists(gitFolderPath)) {
+        std::cout << "Repository already initialized at " << repoPath << std::endl;
+    } else {
+        fs::create_directories(gitFolderPath);
+
+        std::ofstream logFile(gitFolderPath + "/log");
+        logFile.close();
+
+        std::ofstream filesFile(gitFolderPath + "/Files");
+        filesFile.close();
+
+        std::cout << "Initialized empty repository in " << repoPath << std::endl;
+    }
 }
-=======
->>>>>>> a02ce5a64f4a193fd672e82d6b4e46b9b9b24a67
+
