@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <optional>
+#include <vector>
 
 enum class Operation {
     Init,
@@ -16,11 +17,11 @@ class Repository {
 public:
     Repository(const std::string& repoPath);
 
-    void init();
-    void add(const std::string& fileName);
-    void commit(const std::string& fileName, const std::string& message);
+    int init();
+    std::string add(const std::string& fileName);
+    std::string commit(const std::string& fileName, const std::string& message);
     void log(Operation operation, const std::string& message) const;
-    void status() const;
+    std::vector<std::string> status() const;
 
 
 private:

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <includes/Repository.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,9 +25,17 @@ private slots:
 
     void on_browseBtn2_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_enterToRepo_clicked();
+
+    void on_addBtn_clicked();
+
+    void on_commitBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
+    QString selectedFolder;
+    Repository* repo;
+    QString fileToAdd;
+
 };
 #endif // MAINWINDOW_H
