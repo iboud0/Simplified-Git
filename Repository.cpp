@@ -5,6 +5,8 @@
 #include <optional>
 #include <experimental/filesystem>
 #include <vector>
+#include <chrono>
+#include <ctime>
 
 namespace fs = std::experimental::filesystem;
 
@@ -88,7 +90,14 @@ void Repository::log(Operation operation, const std::string& message) const {
             break;
     }
 
-    logFile << operationStr << ": " << message << std::endl;
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* now_tm = std::localtime(&now_c);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", now_tm);
+
+
+    logFile << std::string(buffer) << " " << operationStr << ": " << message << std::endl;
     logFile << "--------------------------------" << std::endl;
 
     logFile.close();
