@@ -17,7 +17,7 @@ class Repository {
 public:
     Repository(const std::string& repoPath);
 
-    int init();
+    std::string init();
     std::string add(const std::string& fileName);
     std::string commit(const std::string& fileName, const std::string& message);
     void log(Operation operation, const std::string& message) const;

@@ -56,11 +56,9 @@ void MainWindow::on_enterToRepo_clicked()
 
         this->repo = new Repository(selectedFolder.toStdString());
 
-        // int repoWasCreated = repo.init();
-        // if (repoWas)
+        std::string msg = repo->init();
 
-        repo->init();
-        ui->repoNameLabel->setText(selectedFolder);
+        ui->repoInitMessage->setText(QString::fromStdString(msg));
         ui->stackedWidget->setCurrentIndex(1);
     }
 
@@ -104,5 +102,24 @@ void MainWindow::on_commitBtn_clicked()
             ui->commitSuccessLabel->setText(QString::fromStdString(msgToShow));
         }
     }
+}
+
+
+
+
+
+void MainWindow::on_changeRepoBtn_clicked()
+{
+    this->selectedFolder = nullptr;
+    this->repo = nullptr;
+    this->fileToAdd = nullptr;
+
+    ui->commitSuccessLabel->clear();
+    ui->statusTextbox->clear();
+
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 

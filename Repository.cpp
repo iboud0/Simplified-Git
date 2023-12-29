@@ -163,12 +163,12 @@ std::vector<std::string> Repository::status() const {
     return v;
 }
 
-int Repository::init() {
+std::string Repository::init() {
     std::string gitFolderPath = repoPath + "/git";
 
     if (fs::exists(gitFolderPath)) {
         std::cout << "Repository already initialized at " << repoPath << std::endl;
-        return 0;
+        return "Opened repository at: " + repoPath;
     } else {
         fs::create_directories(gitFolderPath);
 
@@ -179,7 +179,7 @@ int Repository::init() {
         filesFile.close();
 
         std::cout << "Initialized empty repository in " << repoPath << std::endl;
-        return 1;
+        return "Initialized empty repository in " + repoPath;
     }
 }
 

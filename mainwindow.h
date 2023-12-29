@@ -31,6 +31,8 @@ private slots:
 
     void on_commitBtn_clicked();
 
+    void on_changeRepoBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString selectedFolder;
