@@ -70,8 +70,20 @@ private:
     std::string logFilePath; ///< The path to the log file.
     std::string filesPath; ///< The path to the file tracking committed files.
 
+    /**
+     * @brief Loads information about committed files from the filesPath.
+     */
     void loadCommittedFiles();
+
+    /**
+     * @brief Saves committed files information to the filesPath and logs a commit message.
+     * @param message The commit message.
+     */
     void saveCommittedFiles(const std::string& message) const;
+
+    /**
+     * @brief Overwrites the filesPath file with committed files information.
+     */
     void overwriteFilesFile() const;
 };
 

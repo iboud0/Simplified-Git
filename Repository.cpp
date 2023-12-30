@@ -23,7 +23,11 @@ Repository::Repository(const std::string& repoPath) : repoPath(repoPath) {
     loadCommittedFiles();
 }
 
-
+/**
+ * @brief Adds a file to the list of committed files.
+ * @param fileName The name of the file to add.
+ * @return A message indicating the add status.
+ */
 std::string Repository::add(const std::string& fileName) {
     if (std::ifstream(repoPath + "/" + fileName)) {
         auto it = committedFiles.find(fileName);
@@ -45,6 +49,13 @@ std::string Repository::add(const std::string& fileName) {
     }
 }
 
+
+/**
+ * @brief Commits changes to a file in the repository.
+ * @param fileName The name of the file to commit.
+ * @param message The commit message.
+ * @return A message indicating the commit status.
+ */
 std::string Repository::commit(const std::string& fileName, const std::string& message) {
     if (std::ifstream(repoPath + "/" + fileName)) {
         auto it = committedFiles.find(fileName);
@@ -76,7 +87,11 @@ std::string Repository::commit(const std::string& fileName, const std::string& m
     }
 }
 
-
+/**
+ * @brief Logs an operation with a message.
+ * @param operation The type of operation (Init, Add, Commit, etc.).
+ * @param message The log message.
+ */
 void Repository::log(Operation operation, const std::string& message) const {
     std::ofstream logFile(logFilePath, std::ios::app);
 
@@ -108,6 +123,10 @@ void Repository::log(Operation operation, const std::string& message) const {
     logFile.close();
 }
 
+
+/**
+ * @brief Loads information about committed files from the filesPath.
+ */
 void Repository::loadCommittedFiles() {
     std::ifstream filesFile(filesPath);
     std::string fileName;
@@ -118,6 +137,10 @@ void Repository::loadCommittedFiles() {
     }
 }
 
+
+/**
+ * @brief Overwrites the filesPath file with committed files information.
+ */
 void Repository::overwriteFilesFile() const {
     std::ofstream filesFile(filesPath, std::ios::trunc);
 
@@ -135,6 +158,11 @@ void Repository::overwriteFilesFile() const {
     filesFile.close();
 }
 
+
+/**
+ * @brief Saves committed files information to the filesPath and logs a commit message.
+ * @param message The commit message.
+ */
 void Repository::saveCommittedFiles(const std::string& message) const {
     overwriteFilesFile();
     log(Operation::Commit, message);
