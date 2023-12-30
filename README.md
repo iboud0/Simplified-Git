@@ -28,12 +28,13 @@ Enjoy the simplicity of Git operations through the graphical interface.
 
 To run the CLI mode:
 
-bash
+```bash
 ##### Navigate to the project directory
 cd path/to/Simplified-Git
 
 ##### Uncomment the relevant code block in main.cpp for CLI
 ##### Compile and run the CLI application
+```
 
 
 ## Testing
