@@ -10,6 +10,11 @@
 
 namespace fs = std::experimental::filesystem;
 
+
+/**
+ * @brief Constructs a Repository object with the specified repository path.
+ * @param repoPath The path to the repository.
+ */
 Repository::Repository(const std::string& repoPath) : repoPath(repoPath) {
     gitFolderPath = repoPath + "/git";
     logFilePath = gitFolderPath + "/log";
@@ -135,6 +140,11 @@ void Repository::saveCommittedFiles(const std::string& message) const {
     log(Operation::Commit, message);
 }
 
+
+/**
+ * @brief Gets the status of the repository.
+ * @return A vector of strings indicating the status of files in the repository.
+ */
 std::vector<std::string> Repository::status() const {
 
     std::vector<std::string> v;
@@ -172,6 +182,11 @@ std::vector<std::string> Repository::status() const {
     return v;
 }
 
+
+/**
+ * @brief Initializes the repository.
+ * @return A message indicating the initialization status.
+ */
 std::string Repository::init() {
     std::string gitFolderPath = repoPath + "/git";
 

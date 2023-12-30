@@ -1,8 +1,17 @@
 #include "includes/Git.h"
 #include "includes/File.h"
 
+
+/**
+ * @brief Constructs a Git object with the specified repository path.
+ * @param repoPath The path to the repository.
+ */
 Git::Git(const std::string& repoPath) : repository(repoPath) {}
 
+
+/**
+ * @brief Enters the Git command-line interface (REPL).
+ */
 void Git::repl() {
     std::string input;
     Command command;
@@ -36,6 +45,11 @@ void Git::repl() {
 }
 
 
+/**
+ * @brief Parses a user input command.
+ * @param input The user input string.
+ * @return The parsed Git command.
+ */
 Git::Command Git::parseCommand(const std::string& input) {
     if (input == "init") {
         return Command::Init;
@@ -54,6 +68,10 @@ Git::Command Git::parseCommand(const std::string& input) {
     }
 }
 
+
+/**
+ * @brief Handles the "add" command.
+ */
 void Git::handleAdd() {
     std::string fileName;
     std::cout << "Enter file name to add: ";
@@ -61,6 +79,10 @@ void Git::handleAdd() {
     repository.add(fileName);
 }
 
+
+/**
+ * @brief Handles the "commit" command.
+ */
 void Git::handleCommit() {
     std::string message;
     std::cout << "Enter commit message: ";
